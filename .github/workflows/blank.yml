@@ -1,27 +1,16 @@
-name: Build Delphi App
+name: Build
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup Delphi
-      uses: kjarosz/setup-delphi@v1
-      with:
-        version: '11.0'
-        license: ${{ secrets.DELPHI_LICENSE }}
-
-    - name: Compile code
-      run: dcc32 MyProject.dpr
-
-    - name: Publish artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: MyProject
-        path: MyProject.exe
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        "C:\Program Files (x86)\Embarcadero\Studio\22.0\bin\rsvars.bat"
+        msbuild.exe MyProject.dproj /t:Build /p:Config=Release
