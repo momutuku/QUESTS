@@ -13,4 +13,5 @@ jobs:
     - name: Build
       run: |
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe"
-          MyProject.dproj /t:Build /p:Config=Release
+          "C:\Program Files (x86)\Embarcadero\Studio\22.0\bin\rsvars.bat"
+           msbuild.exe MyProject.dproj /t:Build /p:Config=Release
