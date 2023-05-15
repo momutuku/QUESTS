@@ -1,0 +1,111 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'Welcome'
+  ClientHeight = 263
+  ClientWidth = 505
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 208
+    Top = 94
+    Width = 56
+    Height = 18
+    Caption = 'Include'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 392
+    Top = 6
+    Width = 69
+    Height = 35
+    Caption = 'Copy'
+    OnClick = SpeedButton1Click
+  end
+  object lblLength: TLabel
+    Left = 48
+    Top = 60
+    Width = 33
+    Height = 13
+    Caption = 'Length'
+  end
+  object edPassword: TEdit
+    Left = 43
+    Top = 7
+    Width = 273
+    Height = 33
+    Enabled = False
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 189
+    Top = 214
+    Width = 75
+    Height = 25
+    Caption = 'GENERATE'
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object chUpper: TCheckBox
+    Left = 64
+    Top = 118
+    Width = 161
+    Height = 17
+    Caption = 'UPPERCASE LETTERS'
+    Checked = True
+    State = cbChecked
+    TabOrder = 2
+  end
+  object cbLower: TCheckBox
+    Left = 64
+    Top = 158
+    Width = 161
+    Height = 17
+    Caption = 'LOWERCASE LETTERS'
+    Checked = True
+    State = cbChecked
+    TabOrder = 3
+  end
+  object cbChar: TCheckBox
+    Left = 288
+    Top = 158
+    Width = 97
+    Height = 17
+    Caption = 'CHARACTERS'
+    Checked = True
+    State = cbChecked
+    TabOrder = 4
+  end
+  object cbNumbers: TCheckBox
+    Left = 288
+    Top = 118
+    Width = 97
+    Height = 17
+    Caption = 'NUMBERS'
+    Checked = True
+    State = cbChecked
+    TabOrder = 5
+  end
+  object nbPassLength: TEdit
+    Left = 91
+    Top = 56
+    Width = 121
+    Height = 21
+    NumbersOnly = True
+    TabOrder = 6
+    Text = '10'
+  end
+end
