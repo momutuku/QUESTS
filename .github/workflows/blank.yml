@@ -1,17 +1,27 @@
-name: Build
+name: Release
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  build:
+  release:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build
+    - name: Move EXE file to releases directory
       run: |
-          "C:\Program Files (x86)\Embarcadero\Studio\22.0\bin\rsvars.bat"
-          "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe"
-           msbuild.exe MyProject.dproj /t:Build /p:Config=Release
+        mkdir releases
+        move Password Generator\objects\PasswordGenerator.exe releases\
+    - name: Create new release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v1.0.0
+        release_name: Release v1.0.0
+        body: |
+          This is the first release of Password Generator.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
