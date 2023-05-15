@@ -1,4 +1,4 @@
-name: Release
+name: Build and Release
 
 on:
   push:
@@ -6,22 +6,26 @@ on:
       - master
 
 jobs:
-  release:
+  build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Move EXE file to releases directory
-      run: |
-        mkdir releases
-        move Password Generator\objects\PasswordGenerator.exe releases\
-    - name: Create new release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v1.0.0
-        release_name: Release v1.0.0
-        body: |
-          This is the first release of Password Generator.
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          "C:\Program Files (x86)\Embarcadero\Studio\22.0\bin\rsvars.bat"
+          msbuild.exe MyProject.dproj /t:Build /p:Config=Release
+      - name: Move EXE to Release
+        run: |
+          mkdir -p release
+          mv Password Generator\Objects\PasswordGenerator.exe release/PasswordGenerator.exe
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0
+          release_name: Release v1.0
+          body: |
+            This is the first release of PasswordGenerator.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
