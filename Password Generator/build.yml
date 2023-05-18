@@ -1,27 +1,31 @@
-name: Build Delphi App
+name: Build and Release
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup Delphi
-      uses: kjarosz/setup-delphi@v1
-      with:
-        version: '11.0'
-        license: ${{ secrets.DELPHI_LICENSE }}
-
-    - name: Compile code
-      run: dcc32 MyProject.dpr
-
-    - name: Publish artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: MyProject
-        path: MyProject.exe
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          "C:\Program Files (x86)\Embarcadero\Studio\22.0\bin\rsvars.bat"
+          msbuild.exe PasswordGenerator.dproj /t:Build /p:Config=Release
+      - name: Move EXE to Release
+        run: |
+          mkdir -p release
+          mv Password Generator\Objects\PasswordGenerator.exe release/PasswordGenerator.exe
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0
+          release_name: Release v1.0
+          body: |
+            This is the first release of PasswordGenerator.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

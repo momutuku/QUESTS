@@ -2,7 +2,8 @@ program PasswordGenerator;
 
 uses
   Vcl.Forms,
-  fMain in 'fMain.pas' {Form2};
+  fMain in 'fMain.pas' {Form2},
+  uTheme in 'uTheme.pas';
 
 {$R *.res}
 

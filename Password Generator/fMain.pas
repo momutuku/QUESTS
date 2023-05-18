@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, ClipBrd, Vcl.Buttons,
-  Vcl.NumberBox;
+  Vcl.NumberBox, uTheme, Vcl.Imaging.pngimage, Vcl.ExtCtrls;
 
 type
   TForm2 = class(TForm)
@@ -20,13 +20,23 @@ type
     SpeedButton1: TSpeedButton;
     nbPassLength: TEdit;
     lblLength: TLabel;
+    Button2: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    btnDark: TImage;
+    btnLight: TImage;
+
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     gincluded: array of Integer;
     lower_letters, upper_letters, characters, numbers: array of char;
+    TThemer: TTheme;
     function getChar(arr: Integer): char;
     procedure checkIncludes;
   public
@@ -60,11 +70,13 @@ begin
     lPass := lPass + getChar(lPosition);
 
   end;
-     edPassword.text := lPass;
+  edPassword.text := lPass;
+  lblLength.color := clWhite;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
+  TThemer := TTheme.Create;
   numbers := ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   lower_letters := ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -100,6 +112,24 @@ end;
 procedure TForm2.SpeedButton1Click(Sender: TObject);
 begin
   Clipboard.AsText := edPassword.text;
+end;
+
+procedure TForm2.Button2Click(Sender: TObject);
+
+begin
+
+  TThemer.changeTheme;
+  Form2.color := TThemer.WindowColor;
+  Label1.Font.color := TThemer.TextColor;
+  lblLength.Font.color := TThemer.TextColor;
+  Label1.color := TThemer.TextColor;
+  Label2.Font.color := TThemer.TextColor;
+  Label3.Font.color := TThemer.TextColor;
+  Label4.Font.color := TThemer.TextColor;
+  Label5.Font.color := TThemer.TextColor;
+  nbPassLength.Font.color := TThemer.TextColor;
+  btnLight.Visible := not btnLight.Visible;
+  btnDark.Visible := not btnDark.Visible;
 end;
 
 procedure TForm2.checkIncludes;

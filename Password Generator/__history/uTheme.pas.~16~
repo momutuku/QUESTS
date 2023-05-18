@@ -1,0 +1,43 @@
+unit uTheme;
+
+interface
+
+uses System.UITypes;
+
+type
+  TTheme = class(TObject)
+  private
+
+  protected
+  public
+    FMainTheme: Boolean;
+
+    TextColor: TColor;
+    WindowColor: TColor;
+    function changeTheme: Boolean;
+  end;
+
+implementation
+
+{ TTheme }
+
+function TTheme.changeTheme: Boolean;
+begin
+  FMainTheme := not FMainTheme;
+  (* Were giong with the assumption that 1 is light mode 2 is dark mode *)
+  case aNewTheme of
+    1:
+      begin
+        TextColor := TColors.Black;
+        WindowColor := TColors.White;
+      end;
+    2:
+      begin
+        TextColor := TColors.White;
+        WindowColor := TColors.Black;
+      end;
+  end;
+
+end;
+
+end.

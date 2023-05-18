@@ -9,3 +9,7 @@ Our password generator uses a combination of upper and lowercase letters, number
 
 With the increasing need for online security, it's important to use strong passwords that are difficult for hackers to crack.
 Our password generator makes it easy for users to create secure passwords that they can confidently use to protect their personal information online.
+
+### Update: 18th May 2023 ###
+Added dark mode as well. Small step for me even smaller step for mankind 🥳🥳🥳
+![](https://media.tenor.com/0W8uxTxoh44AAAAC/drake-dark-mode.gif)
