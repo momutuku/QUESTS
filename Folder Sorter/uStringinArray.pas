@@ -1,0 +1,36 @@
+﻿unit uStringinArray;
+
+interface
+
+type
+  TStringinArray = class(Tobject)
+  private
+
+  public
+   function IsStringInArray(const AString: string; const AArray: array of string): Boolean;
+
+  end;
+
+implementation
+
+uses
+organizer;
+
+
+
+function TStringinArray.IsStringInArray(const AString: string; const AArray: array of string): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  for i := Low(AArray) to High(AArray) do
+  begin
+    if AArray[i] = AString then
+    begin
+      Result := True;
+      Break;
+    end;
+  end;
+end;
+
+end.

@@ -1,0 +1,394 @@
+﻿unit uFileExtensions;
+
+interface
+
+uses
+  System.StrUtils, System.Classes, System.Generics.Collections, System.IOUtils,
+  System.SysUtils;
+
+type
+  TFileExtension = class(TObject)
+  private
+    TfileName, TSourceDir: String;
+  public
+
+    function extractExtension(const aFileName: String): String;
+    function determineFolder(aExtenison: String): String;
+    function StringInArrays(const S: string; Arrays: array of string): Boolean;
+    function move2destination(aSource, aDestination: String): Boolean;
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+  protected
+  end;
+
+implementation
+
+uses
+  organizer;
+
+var
+  ext: string;
+  image: array [0 .. 10] of string = (
+    '.jpg',
+    '.jpeg',
+    '.jfif',
+    '.pjpeg',
+    '.pjp',
+    '.png',
+    '.gif',
+    '.webp',
+    '.svg',
+    '.apng',
+    '.avif'
+  );
+  documents: array [0 .. 4] of string = (
+    '.txt',
+    '.doc',
+    '.pdf',
+    '.jpg',
+    '.xlsx'
+  );
+  video: array [0 .. 8] of string = (
+    '.webm',
+    '.MTS',
+    '.M2TS',
+    '.TS',
+    '.mov',
+    '.mp4',
+    '.m4p',
+    '.m4v',
+    '.mxf'
+  );
+
+  audio: array [0 .. 26] of string = (
+    '.3ga',
+    '.aac',
+    '.ac3',
+    '.aif',
+    '.aiff',
+    '.alac',
+    '.amr',
+    '.ape',
+    '.au',
+    '.dss',
+    '.flac',
+    '.flv',
+    '.m4a',
+    '.m4b',
+    '.m4p',
+    '.mp3',
+    '.mpga',
+    '.ogg',
+    '.oga',
+    '.mogg',
+    '.opus',
+    '.qcp',
+    '.tta',
+    '.voc',
+    '.wav',
+    '.wma',
+    '.wv'
+  );
+  zipped: array [0 .. 1] of string = (
+    '.zip',
+    '.rar'
+  );
+  xml: array [0 .. 1] of string = (
+    '.xml',
+    '.xmls'
+  );
+  spreadsheets: array [0 .. 1] of string = (
+    '.csv',
+    '.xlsx'
+  );
+  executable: array [0 .. 1] of string = (
+    '.exe',
+    '.msi'
+  );
+
+  (*
+    import os
+    import shutil
+    from pathlib import Path
+
+    audio = ('.3ga', '.aac', '.ac3', '.aif', '.aiff',
+    '.alac', '.amr', '.ape', '.au', '.dss',
+    '.flac', '.flv', '.m4a', '.m4b', '.m4p',
+    '.mp3', '.mpga', '.ogg', '.oga', '.mogg',
+    '.opus', '.qcp', '.tta', '.voc', '.wav',
+    '.wma', '.wv')
+
+    video = ('.webm', '.MTS', '.M2TS', '.TS', '.mov',
+    '.mp4', '.m4p', '.m4v', '.mxf')
+
+    img = ('.jpg', '.jpeg', '.jfif', '.pjpeg', '.pjp', '.png',
+    '.gif', '.webp', '.svg', '.apng', '.avif')
+
+    zip = ('.zip', '.rar')
+
+    xml = ('.xml', '.xmls')
+
+    spreadsheets = ('.csv', '.xlsx')
+
+    document = ('.pdf', '.txt', '.doc', '.docx', '.pptx')
+
+    executable = ('.exe', '.msi')
+
+
+    def is_audio(file):
+    return os.path.splitext(file)[1] in audio
+
+
+    def is_video(file):
+    return os.path.splitext(file)[1] in video
+
+
+    def is_image(file):
+    return os.path.splitext(file)[1] in img
+
+
+    def is_zipped(file):
+    return os.path.splitext(file)[1] in zip
+
+
+    def is_xml(file):
+    return os.path.splitext(file)[1] in xml
+
+
+    def is_spreadsheets(file):
+    return os.path.splitext(file)[1] in spreadsheets
+
+
+    def is_document(file):
+    return os.path.splitext(file)[1] in document
+
+
+    def is_executable(file):
+    return os.path.splitext(file)[1] in executable
+
+
+    def is_screenshot(file):
+    name, ext = os.path.splitext(file)
+    return (ext in img) and 'screenshot' in name.lower()
+
+
+    os.chdir('C:/Users/Orucho Onsare/Downloads')
+
+    for file in os.listdir():
+    print(file)
+    if is_audio(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/audio'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/New/audio')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/audio')
+    elif is_video(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/video'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/video')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/video')
+    elif is_zipped(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/Zipped'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Zipped')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/Zipped')
+    elif is_xml(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/XML Files/'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/XML FIles/')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/XML Files/')
+    elif is_spreadsheets(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/SpreadSheets'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Spreadsheets')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/Spreadsheets')
+    elif is_document(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/Documents/'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Documents/')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/Documents/')
+    elif is_executable(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/Programs/'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Programs/')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/Programs/')
+
+    elif is_image(file):
+    if is_screenshot(file):
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/Screenshots'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Screenshots')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/screenshots')
+    else:
+    if not os.path.exists('C:/Users/Orucho Onsare/Downloads/Newp/Images'):
+    os.mkdir('C:/Users/Orucho Onsare/Downloads/Newp/Images')
+    shutil.move(file, 'C:/Users/Orucho Onsare/Downloads/Newp/Images')
+
+  *)
+
+  { TFileExtension }
+
+function TFileExtension.extractExtension(const aFileName: String): String;
+var
+  lExtension, lFileName: TStringList;
+begin
+  TfileName := aFileName;
+  lExtension := TStringList.Create;
+  lExtension.Delimiter := '.';
+  lExtension.DelimitedText := aFileName;
+
+  lFileName := TStringList.Create;
+  lFileName.Delimiter := '/';
+  lFileName.DelimitedText := aFileName;
+
+  TfileName := lFileName[lFileName.Count - 1];
+
+  ext := lExtension[lExtension.Count - 1];
+  Result := determineFolder('.' + lExtension[lExtension.Count - 1]);
+end;
+
+function TFileExtension.StringInArrays(const S: string;
+  Arrays: array of string): Boolean;
+var
+  I, J: Integer;
+
+begin
+  Result := False;
+  for I := Low(Arrays) to High(Arrays) do
+  begin
+    if Arrays[I] = S then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
+end;
+
+procedure TFileExtension.AfterConstruction;
+begin
+  inherited;
+
+end;
+
+procedure TFileExtension.BeforeDestruction;
+begin
+  inherited;
+
+end;
+
+function TFileExtension.determineFolder(aExtenison: String): String;
+var
+  lPath: string;
+begin
+  lPath := GetCurrentDir;
+  if StringInArrays(aExtenison, image) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\images\') then
+        TDirectory.CreateDirectory(lPath + '\images\');
+
+    except
+
+    end;
+    Result := (lPath + '\images\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, documents) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\documents\') then
+        TDirectory.CreateDirectory(lPath + '\documents\');
+
+    except
+
+    end;
+    Result := (lPath + '\documents\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, video) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\video\') then
+        TDirectory.CreateDirectory(lPath + '\video\');
+
+    except
+
+    end;
+    Result := (lPath + '\video\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, audio) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\audio\') then
+        TDirectory.CreateDirectory(lPath + '\audio\');
+
+    except
+
+    end;
+    Result := (lPath + '\audio\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, zipped) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\zipped\') then
+        TDirectory.CreateDirectory(lPath + '\zipped\');
+
+    except
+
+    end;
+    Result := (lPath + '\zipped\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, xml) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\xml\') then
+        TDirectory.CreateDirectory(lPath + '\xml\');
+
+    except
+
+    end;
+    Result := (lPath + '\xml\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, spreadsheets) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\spreadsheets\') then
+        TDirectory.CreateDirectory(lPath + '\spreadsheets\');
+
+    except
+
+    end;
+    Result := (lPath + '\spreadsheets\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, executable) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\executable\') then
+        TDirectory.CreateDirectory(lPath + '\executable\');
+
+    except
+
+    end;
+    Result := (lPath + '\executable\');
+    Exit;
+  end;
+
+end;
+
+function TFileExtension.move2destination(aSource, aDestination: String)
+  : Boolean;
+begin
+  try
+    System.IOUtils.TFile.Move(aSource, aDestination + TfileName);
+    Result := True;
+  except
+    Result := False;
+
+  end;
+
+end;
+
+end.

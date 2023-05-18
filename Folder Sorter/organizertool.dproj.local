@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/05/10 14:39:44.000.014,=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\Unit1.pas</Transaction>
+    <Transaction>2023/05/10 14:55:48.000.379,C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\Unit1.dfm=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\organizer.dfm</Transaction>
+    <Transaction>2023/05/10 14:55:48.000.379,C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\Unit1.pas=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\organizer.pas</Transaction>
+    <Transaction>2023/05/10 17:27:50.000.705,C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\Project1.dproj=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\organizertool.dproj</Transaction>
+    <Transaction>2023/05/11 15:05:33.000.450,=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\Unit1.pas</Transaction>
+    <Transaction>2023/05/11 15:06:00.000.182,C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\uFileExtensions.pas=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\Unit1.pas</Transaction>
+    <Transaction>2023/05/17 16:51:16.000.005,=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\Unit1.pas</Transaction>
+    <Transaction>2023/05/17 16:51:39.000.998,C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\uStringinArray.pas=C:\Users\eProd\Documents\Embarcadero\Studio\Projects\eProd\organizer\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

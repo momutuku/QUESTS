@@ -1,0 +1,290 @@
+﻿unit uFileExtensions;
+
+interface
+
+uses
+  System.StrUtils, System.Classes, System.Generics.Collections, System.IOUtils,
+  System.SysUtils;
+
+type
+  TFileExtension = class(TObject)
+  private
+    TfileName, TSourceDir: String;
+    lPath: string;
+  public
+
+    function extractExtension(const aFileName: String): String;
+    function determineFolder(aExtenison: String): String;
+    function StringInArrays(const S: string; Arrays: array of string): Boolean;
+    function move2destination(aSource, aDestination, aSelectedFolderPath
+      : String): Boolean;
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+    Constructor Create(aFinalDir: string); overload;
+
+  protected
+  end;
+
+implementation
+
+uses
+  organizer;
+
+var
+  ext: string;
+  image: array [0 .. 10] of string = (
+    '.jpg',
+    '.jpeg',
+    '.jfif',
+    '.pjpeg',
+    '.pjp',
+    '.png',
+    '.gif',
+    '.webp',
+    '.svg',
+    '.apng',
+    '.avif'
+  );
+  documents: array [0 .. 4] of string = (
+    '.txt',
+    '.doc',
+    '.pdf',
+    '.jpg',
+    '.xlsx'
+  );
+  video: array [0 .. 8] of string = (
+    '.webm',
+    '.MTS',
+    '.M2TS',
+    '.TS',
+    '.mov',
+    '.mp4',
+    '.m4p',
+    '.m4v',
+    '.mxf'
+  );
+
+  audio: array [0 .. 26] of string = (
+    '.3ga',
+    '.aac',
+    '.ac3',
+    '.aif',
+    '.aiff',
+    '.alac',
+    '.amr',
+    '.ape',
+    '.au',
+    '.dss',
+    '.flac',
+    '.flv',
+    '.m4a',
+    '.m4b',
+    '.m4p',
+    '.mp3',
+    '.mpga',
+    '.ogg',
+    '.oga',
+    '.mogg',
+    '.opus',
+    '.qcp',
+    '.tta',
+    '.voc',
+    '.wav',
+    '.wma',
+    '.wv'
+  );
+  zipped: array [0 .. 1] of string = (
+    '.zip',
+    '.rar'
+  );
+  xml: array [0 .. 1] of string = (
+    '.xml',
+    '.xmls'
+  );
+  spreadsheets: array [0 .. 1] of string = (
+    '.csv',
+    '.xlsx'
+  );
+  executable: array [0 .. 1] of string = (
+    '.exe',
+    '.msi'
+  );
+
+  { TFileExtension }
+
+function TFileExtension.extractExtension(const aFileName: String): String;
+var
+  lExtension, lFileName: TStringList;
+begin
+  TfileName := aFileName;
+  lExtension := TStringList.Create;
+  lExtension.Delimiter := '.';
+  lExtension.DelimitedText := aFileName;
+
+  lFileName := TStringList.Create;
+  lFileName.Delimiter := '\';
+  lFileName.DelimitedText := aFileName;
+
+  TfileName := lFileName[lFileName.Count - 1];
+
+  ext := lExtension[lExtension.Count - 1];
+  Result := determineFolder('.' + lExtension[lExtension.Count - 1]);
+end;
+
+function TFileExtension.StringInArrays(const S: string;
+  Arrays: array of string): Boolean;
+var
+  I, J: Integer;
+
+begin
+  Result := False;
+  for I := Low(Arrays) to High(Arrays) do
+  begin
+    if Arrays[I] = S then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
+end;
+
+procedure TFileExtension.AfterConstruction;
+begin
+  inherited;
+
+end;
+
+procedure TFileExtension.BeforeDestruction;
+begin
+  inherited;
+
+end;
+
+constructor TFileExtension.Create(aFinalDir: string);
+begin
+  lPath := aFinalDir;
+end;
+
+function TFileExtension.determineFolder(aExtenison: String): String;
+
+begin
+  if StringInArrays(aExtenison, image) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\images\') then
+        TDirectory.CreateDirectory(lPath + '\images\');
+
+    except
+
+    end;
+    Result := (lPath + '\images\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, documents) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\documents\') then
+        TDirectory.CreateDirectory(lPath + '\documents\');
+
+    except
+
+    end;
+    Result := (lPath + '\documents\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, video) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\video\') then
+        TDirectory.CreateDirectory(lPath + '\video\');
+
+    except
+
+    end;
+    Result := (lPath + '\video\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, audio) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\audio\') then
+        TDirectory.CreateDirectory(lPath + '\audio\');
+
+    except
+
+    end;
+    Result := (lPath + '\audio\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, zipped) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\zipped\') then
+        TDirectory.CreateDirectory(lPath + '\zipped\');
+
+    except
+
+    end;
+    Result := (lPath + '\zipped\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, xml) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\xml\') then
+        TDirectory.CreateDirectory(lPath + '\xml\');
+
+    except
+
+    end;
+    Result := (lPath + '\xml\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, spreadsheets) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\spreadsheets\') then
+        TDirectory.CreateDirectory(lPath + '\spreadsheets\');
+
+    except
+
+    end;
+    Result := (lPath + '\spreadsheets\');
+    Exit;
+  end;
+
+  if StringInArrays(aExtenison, executable) then
+  begin
+    try
+      if not TDirectory.Exists(lPath + '\executable\') then
+        TDirectory.CreateDirectory(lPath + '\executable\');
+
+    except
+
+    end;
+    Result := (lPath + '\executable\');
+    Exit;
+  end;
+
+end;
+
+function TFileExtension.move2destination(aSource, aDestination,
+  aSelectedFolderPath: String): Boolean;
+begin
+  try
+    System.IOUtils.TFile.Move(aSource, lPath + '/' + TfileName);
+    Result := True;
+  except
+    Result := False;
+
+  end;
+
+end;
+
+end.
