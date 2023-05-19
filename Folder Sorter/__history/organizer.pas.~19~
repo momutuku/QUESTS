@@ -42,11 +42,11 @@ var
 begin
   for li := 0 to listBoxFolder.Count - 1 do
   begin
-    fileext := TFileExtension.Create;
+    fileext := TFileExtension.Create(SelectedFolderPath);
     if fileext.move2destination(listBoxFolder.Items[li],
       fileext.extractExtension(listBoxFolder.Items[li])) then
     begin
-      showMessage(li.ToString);
+      // showMessage(li.ToString);
     end;
   end;
 end;

@@ -12,7 +12,8 @@ type
     TfileName, TSourceDir: String;
     lPath: string;
   public
-
+    FApplicationDir, FDocumentDir, FImageDir, FVideoDir, FAudioDir, FZippedDir,
+      FSpreadSheetDir, FXMLDir: String;
     function extractExtension(const aFileName: String): String;
     function determineFolder(aExtenison: String): String;
     function StringInArrays(const S: string; Arrays: array of string): Boolean;
@@ -170,13 +171,13 @@ begin
   if StringInArrays(aExtenison, image) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\images\') then
-        TDirectory.CreateDirectory(lPath + '\images\');
+      if not TDirectory.Exists(lPath + '\'+FImageDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FImageDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\images\');
+    lPath := (lPath + '\'+FImageDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -184,13 +185,13 @@ begin
   if StringInArrays(aExtenison, documents) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\documents\') then
-        TDirectory.CreateDirectory(lPath + '\documents\');
+      if not TDirectory.Exists(lPath + '\'+FDocumentDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FDocumentDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\documents\');
+    lPath := (lPath + '\'+FDocumentDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -198,13 +199,13 @@ begin
   if StringInArrays(aExtenison, video) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\video\') then
-        TDirectory.CreateDirectory(lPath + '\video\');
+      if not TDirectory.Exists(lPath + '\'+FVideoDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FVideoDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\video\');
+    lPath := (lPath + '\'+FVideoDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -212,13 +213,13 @@ begin
   if StringInArrays(aExtenison, audio) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\audio\') then
-        TDirectory.CreateDirectory(lPath + '\audio\');
+      if not TDirectory.Exists(lPath + '\'+FAudioDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FAudioDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\audio\');
+    lPath := (lPath + '\'+FAudioDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -226,13 +227,13 @@ begin
   if StringInArrays(aExtenison, zipped) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\zipped\') then
-        TDirectory.CreateDirectory(lPath + '\zipped\');
+      if not TDirectory.Exists(lPath + '\'+FZippedDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FZippedDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\zipped\');
+    lPath := (lPath + '\'+FZippedDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -240,13 +241,13 @@ begin
   if StringInArrays(aExtenison, xml) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\xml\') then
-        TDirectory.CreateDirectory(lPath + '\xml\');
+      if not TDirectory.Exists(lPath + '\'+FXMLDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FXMLDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\xml\');
+    lPath := (lPath + '\'+FXMLDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -254,13 +255,13 @@ begin
   if StringInArrays(aExtenison, spreadsheets) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\spreadsheets\') then
-        TDirectory.CreateDirectory(lPath + '\spreadsheets\');
+      if not TDirectory.Exists(lPath + '\'+FSpreadSheetDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FSpreadSheetDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\spreadsheets\');
+    lPath := (lPath + '\'+FSpreadSheetDir+'\');
     Result := lPath;
     Exit;
   end;
@@ -268,13 +269,13 @@ begin
   if StringInArrays(aExtenison, executable) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\executable\') then
-        TDirectory.CreateDirectory(lPath + '\executable\');
+      if not TDirectory.Exists(lPath + '\'+FApplicationDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FApplicationDir+'\');
 
     except
 
     end;
-    lPath := (lPath + '\executable\');
+    lPath := (lPath + '\'+FApplicationDir+'\');
     Result := lPath;
     Exit;
   end;

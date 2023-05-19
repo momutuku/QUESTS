@@ -10,16 +10,17 @@ type
   TFileExtension = class(TObject)
   private
     TfileName, TSourceDir: String;
-     lPath: string;
+    lPath: string;
   public
-
+    FApplicationDir, FDocumentDir, FImageDir, FVideoDir, FAudioDir, FZippedDir,
+      FSpreadSheetDir, FXMLDir: String;
     function extractExtension(const aFileName: String): String;
     function determineFolder(aExtenison: String): String;
     function StringInArrays(const S: string; Arrays: array of string): Boolean;
-    function move2destination(aSource, aDestination,aSelectedFolderPath: String): Boolean;
+    function move2destination(aSource, aDestination: String): Boolean;
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
-     Constructor Create(aFinalDir : string); overload;
+    Constructor Create(aFinalDir: string); overload;
 
   protected
   end;
@@ -109,8 +110,6 @@ var
     '.msi'
   );
 
-
-
   { TFileExtension }
 
 function TFileExtension.extractExtension(const aFileName: String): String;
@@ -163,13 +162,12 @@ end;
 
 constructor TFileExtension.Create(aFinalDir: string);
 begin
-lPath:=   aFinalDir;
+  lPath := aFinalDir;
 end;
 
 function TFileExtension.determineFolder(aExtenison: String): String;
 
 begin
-  lPath := GetCurrentDir;
   if StringInArrays(aExtenison, image) then
   begin
     try
@@ -179,7 +177,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\images\');
+    lPath := (lPath + '\images\');
+    Result := lPath;
     Exit;
   end;
 
@@ -192,7 +191,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\documents\');
+    lPath := (lPath + '\documents\');
+    Result := lPath;
     Exit;
   end;
 
@@ -205,7 +205,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\video\');
+    lPath := (lPath + '\video\');
+    Result := lPath;
     Exit;
   end;
 
@@ -218,7 +219,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\audio\');
+    lPath := (lPath + '\audio\');
+    Result := lPath;
     Exit;
   end;
 
@@ -231,7 +233,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\zipped\');
+    lPath := (lPath + '\zipped\');
+    Result := lPath;
     Exit;
   end;
 
@@ -244,7 +247,8 @@ begin
     except
 
     end;
-    Result := (lPath + '\xml\');
+    lPath := (lPath + '\xml\');
+    Result := lPath;
     Exit;
   end;
 
@@ -257,30 +261,32 @@ begin
     except
 
     end;
-    Result := (lPath + '\spreadsheets\');
+    lPath := (lPath + '\spreadsheets\');
+    Result := lPath;
     Exit;
   end;
 
   if StringInArrays(aExtenison, executable) then
   begin
     try
-      if not TDirectory.Exists(lPath + '\executable\') then
-        TDirectory.CreateDirectory(lPath + '\executable\');
+      if not TDirectory.Exists(lPath + '\'+FApplicationDir+'\') then
+        TDirectory.CreateDirectory(lPath + '\'+FApplicationDir+'\');
 
     except
 
     end;
-    Result := (lPath + '\executable\');
+    lPath := (lPath + '\'+FApplicationDir+'\');
+    Result := lPath;
     Exit;
   end;
 
 end;
 
-function TFileExtension.move2destination(aSource, aDestination,aSelectedFolderPath: String)
+function TFileExtension.move2destination(aSource, aDestination: String)
   : Boolean;
 begin
   try
-    System.IOUtils.TFile.Move(aSource, aSelectedFolderPath+'/' + TfileName);
+    System.IOUtils.TFile.Move(aSource, lPath + TfileName);
     Result := True;
   except
     Result := False;

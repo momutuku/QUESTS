@@ -14,7 +14,8 @@ type
     btnOrganize: TSpeedButton;
     Selected_Folder: TGroupBox;
     listBoxFolder: TListBox;
-    Button1: TButton;
+    Label1: TLabel;
+    edtApps: TEdit;
     procedure btnSelectFolderClick(Sender: TObject);
     procedure btnOrganizeClick(Sender: TObject);
   private
@@ -40,13 +41,18 @@ var
   fileext: TFileExtension;
   li: integer;
 begin
+ fileext := TFileExtension.Create(SelectedFolderPath);
+(*FApplicationDir, FDocumentDir, FImageDir, FVideoDir, FAudioDir, FZippedDir,      FSpreadSheetDir, FXMLDir*)
+    fileext.  FApplicationDir:=edtApps.Text;
+
+
   for li := 0 to listBoxFolder.Count - 1 do
   begin
-    fileext := TFileExtension.Create(SelectedFolderPath);
+
     if fileext.move2destination(listBoxFolder.Items[li],
       fileext.extractExtension(listBoxFolder.Items[li])) then
     begin
-      showMessage(li.ToString);
+      // showMessage(li.ToString);
     end;
   end;
 end;

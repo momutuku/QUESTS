@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.FileCtrl,
-  System.IOUtils;
+  System.IOUtils, System.StrUtils;
 
 type
   TfrmMain = class(TForm)
@@ -14,7 +14,22 @@ type
     btnOrganize: TSpeedButton;
     Selected_Folder: TGroupBox;
     listBoxFolder: TListBox;
-    Button1: TButton;
+    Label1: TLabel;
+    edtApps: TEdit;
+    Label2: TLabel;
+    Edit1: TEdit;
+    Label3: TLabel;
+    Edit2: TEdit;
+    Label4: TLabel;
+    Edit3: TEdit;
+    Label5: TLabel;
+    Edit4: TEdit;
+    Label6: TLabel;
+    Edit5: TEdit;
+    Label7: TLabel;
+    Edit6: TEdit;
+    Label8: TLabel;
+    Edit7: TEdit;
     procedure btnSelectFolderClick(Sender: TObject);
     procedure btnOrganizeClick(Sender: TObject);
   private
@@ -40,15 +55,18 @@ var
   fileext: TFileExtension;
   li: integer;
 begin
+
   for li := 0 to listBoxFolder.Count - 1 do
   begin
-    showMessage(listBoxFolder.Items[li]);
-//    fileext := TFileExtension.Create;
-//    if fileext.move2destination(SelectedFolderPath,
-//      fileext.extractExtension('f.exe')) then
-//    begin
-//
-//    end;
+    fileext := TFileExtension.Create(SelectedFolderPath);
+    (* FApplicationDir, FDocumentDir, FImageDir, FVideoDir, FAudioDir, FZippedDir,      FSpreadSheetDir, FXMLDir *)
+    fileext.FApplicationDir := ifthen(Length(edtApps.Text) > 0, edtApps.Text,
+      'Executables');
+    if fileext.move2destination(listBoxFolder.Items[li],
+      fileext.extractExtension(listBoxFolder.Items[li])) then
+    begin
+      // showMessage(li.ToString);
+    end;
   end;
 end;
 
