@@ -157,6 +157,6 @@
       become: true
       when: database_prompt.user_input == 'yes'
 
-    - name: Log in to MySQL server
-      command: mysql -u root -p
-      become: true
+    # - name: Log in to MySQL server
+    #   command: mysql -u root -p
+    #   become: true
