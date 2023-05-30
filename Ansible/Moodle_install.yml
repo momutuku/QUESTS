@@ -1,0 +1,162 @@
+---
+- name: Install and configure Moodle
+  hosts: your_host
+  become: true
+
+  tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
+
+    - name: Install software-properties-common
+      apt:
+        name: software-properties-common
+        state: present
+
+    - name: Add PHP repository
+      apt_repository:
+        repo: ppa:ondrej/php
+
+    - name: Update package lists (again)
+      apt:
+        update_cache: yes
+
+    - name: Install Apache and MySQL client
+      apt:
+        name: 
+          - apache2
+          - mysql-client
+        state: present
+
+    - name: Check if MySQL Server is installed
+      command: dpkg -s mysql-server
+      register: mysql_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install MySQL server
+      apt:
+        name: mysql-server
+        state: present
+      when: mysql_check.rc != 0
+
+    - name: Install additional packages
+      apt:
+        name:
+          - graphviz
+          - aspell
+          - ghostscript
+          - clamav
+          - php7.4-pspell
+          - php7.4-curl
+          - php7.4-gd
+          - php7.4-intl
+          - php7.4-mysql
+          - php7.4-xml
+          - php7.4-xmlrpc
+          - php7.4-ldap
+          - php7.4-zip
+          - php7.4-soap
+          - php7.4-mbstring
+        state: present
+
+    - name: Install PHP 7.4
+      apt:
+        name: php7.4
+        state: present
+
+    - name: Install additional PHP modules
+      apt:
+        name:
+          - php7.4-cli
+          - php7.4-json
+          - php7.4-common
+          - php7.4-mysql
+          - php7.4-zip
+          - php7.4-gd
+          - php7.4-mbstring
+          - php7.4-curl
+          - php7.4-xml
+          - php7.4-bcmath
+        state: present
+
+    - name: Install libapache2-mod-php7.4
+      apt:
+        name: libapache2-mod-php7.4
+        state: present
+
+    - name: Enable PHP 7.4 module for Apache
+      command: a2enmod php7.4
+      become: true
+
+    - name: Check PHP version
+      command: php -v
+
+    - name: Update package lists (again)
+      apt:
+        update_cache: yes
+
+    - name: Secure MySQL installation
+      command: mysql_secure_installation
+      become: true
+      when: mysql_check.rc != 0
+
+    - name: Start MySQL service
+      service:
+        name: mysql
+        state: started
+
+    - name: Restart Apache service
+      service:
+        name: apache2
+        state: restarted
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone Moodle repository
+      git:
+        repo: git://git.moodle.org/moodle.git
+        dest: /opt/moodle
+        version: MOODLE_400_STABLE
+
+    - name: Copy Moodle files to Apache web directory
+      command: cp -R /opt/moodle /var/www/html/
+      become: true
+
+    - name: Create moodledata directory
+      file:
+        path: /var/moodledata
+        state: directory
+        owner: www-data
+        mode: '0777'
+
+    - name: Set permissions for moodledata directory
+      file:
+        path: /var/moodledata
+        mode: '0755'
+        recurse: yes
+
+    - name: Set permissions for Moodle directory
+      file:
+        path: /var/www/html/moodle
+        mode: '0755'
+        recurse: yes
+
+    - name: Prompt user to create Moodle database
+      pause:
+        prompt: "Create Moodle database? (yes/no)"
+      register: database_prompt
+
+    - name: Create Moodle database
+      command: echo " rnn the folloowing sql queries CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+        CREATE USER 'moodledude'@'localhost' IDENTIFIED BY 'passwordformoodledude';
+        GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,CREATE TEMPORARY TABLES,DROP,INDEX,ALTER ON moodle.* TO 'moodledude'@'localhost';" | mysql -u root -p
+      become: true
+      when: database_prompt.user_input == 'yes'
+
+    - name: Log in to MySQL server
+      command: mysql -u root -p
+      become: true
