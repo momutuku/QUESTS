@@ -1,6 +1,6 @@
 ---
 - name: Install and configure Moodle
-  hosts: your_host
+  hosts: localhost
   become: true
 
   tasks:
@@ -96,10 +96,10 @@
       apt:
         update_cache: yes
 
-    - name: Secure MySQL installation
-      command: mysql_secure_installation
-      become: true
-      when: mysql_check.rc != 0
+    # - name: Secure MySQL installation
+    #   command: mysql_secure_installation
+    #   become: true
+    #   when: mysql_check.rc != 0
 
     - name: Start MySQL service
       service:
